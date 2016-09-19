@@ -1,0 +1,31 @@
+event_database_push.settings:
+  type: config_object
+  label: 'Forum settings'
+  mapping:
+    api:
+      type: mapping
+      label: 'API settings'
+      mapping:
+        url:
+          type: string
+          label: 'API url'
+        username:
+          type: string
+          label: 'API username'
+        password:
+          type: string
+          label: 'API password'
+    mapping:
+      type: mapping
+      label: 'Mapping settings'
+      mapping:
+        content_types:
+          type: string
+          label: 'Content types'
+    feed:
+      type: mapping
+      label: 'Feed mapping settings'
+      mapping:
+        content_types:
+          type: string
+          label: 'Content types'

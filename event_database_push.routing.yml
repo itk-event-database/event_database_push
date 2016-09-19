@@ -1,0 +1,9 @@
+event_database_push.settings_form:
+  path: '/admin/config/event_database_push/settings'
+  defaults:
+    _form: 'Drupal\event_database_push\Form\SettingsForm'
+    _title: 'Event Database Push Settings'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

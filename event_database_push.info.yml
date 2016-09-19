@@ -1,0 +1,6 @@
+name: Event database push
+type: module
+description: Push events to Event database
+core: 8.x
+package: Event database
+configure: event_database_push.settings

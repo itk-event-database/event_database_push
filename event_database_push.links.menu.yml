@@ -1,0 +1,6 @@
+event_database_push.settings:
+  title: 'Event database push settings'
+  route_name: event_database_push.settings_form
+  description: 'Settings for pushing events to the Event database'
+  parent: system.admin_config_system
+  weight: 99

@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Contains event_database_push.module..
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function event_database_push_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the event_database_push module.
+    case 'help.page.event_database_push':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Push events to Event API') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function event_database_push_schema() {
+	$schema = [];
+
+	$schema['event_database_push_data'] = [
+		'description' => 'Stores information on events pushed to the Event database',
+    'fields' => [
+      'type' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => "The Event's node type",
+			],
+      'nid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => "The Event's internal node id",
+      ],
+      'data' => [
+        'type' => 'text',
+				'not null' => TRUE,
+        'description' => 'The data',
+			],
+		],
+		'primary key' => ['type', 'nid'],
+	];
+
+	return $schema;
+}
+
+/**
+ * Implements hook_node_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $node
+ */
+function event_database_push_node_insert(EntityInterface $node) {
+	$handler = \Drupal::service('event_database_push.handler');
+	$handler->handle($node, 'insert');
+}
+
+/**
+ * Implements hook_node_update().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $node
+ */
+function event_database_push_node_update(EntityInterface $node) {
+	$handler = \Drupal::service('event_database_push.handler');
+	$handler->handle($node, 'update');
+}
+
+/**
+ * Implements hook_node_delete().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $node
+ */
+function event_database_push_node_delete(EntityInterface $node) {
+  $handler = \Drupal::service('event_database_push.handler');
+  $handler->handle($node, 'delete');
+}
