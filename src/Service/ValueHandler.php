@@ -65,8 +65,8 @@ class ValueHandler extends BaseValueHandler {
 
             switch ($fieldDefinition->getType()) {
                 case 'image':
-                    $uri = $field->entity->getFileUri();
-                    $value = file_create_url($uri);
+                    $uri = empty($field->entity) ? null : $field->entity->getFileUri();
+                    $value = empty($uri) ? null : file_create_url($uri);
                     break;
                 default:
                     $value = $field->value;
