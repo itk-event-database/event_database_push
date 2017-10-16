@@ -3,7 +3,9 @@
 namespace Drupal\event_database_push\Service;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\Entity\Term;
 use Itk\EventDatabaseClient\ObjectTransformer\ValueHandler as BaseValueHandler;
 
 class ValueHandler extends BaseValueHandler {
@@ -67,6 +69,25 @@ class ValueHandler extends BaseValueHandler {
                 case 'image':
                     $uri = empty($field->entity) ? null : $field->entity->getFileUri();
                     $value = empty($uri) ? null : file_create_url($uri);
+                    break;
+                case 'link':
+                    $value = $field->uri;
+                    break;
+                case 'entity_reference':
+                    $id_array = $field->getValue();
+                    $ids = [];
+                    foreach ($id_array as $array) {
+                        foreach (array_values($array) as $id) {
+                            $ids[] = $id;
+                        };
+                    }
+                    $terms = Term::loadMultiple($ids);
+
+                    $value = [];
+                    foreach ($terms as $term) {
+                        $name = $term->getName();
+                        $value[] = $term->getName();
+                    }
                     break;
                 default:
                     $value = $field->value;
