@@ -75,19 +75,38 @@ class ValueHandler extends BaseValueHandler {
                     break;
                 case 'entity_reference':
                     $id_array = $field->getValue();
+                    $target_type = $fieldDefinition->getItemDefinition()->getSetting('target_type');
                     $ids = [];
                     foreach ($id_array as $array) {
                         foreach (array_values($array) as $id) {
                             $ids[] = $id;
                         };
                     }
-                    $terms = Term::loadMultiple($ids);
 
-                    $value = [];
-                    foreach ($terms as $term) {
-                        $name = $term->getName();
-                        $value[] = $term->getName();
+                    if('node' == $target_type) {
+                        $entities = Node::loadMultiple($ids);
+
+                        if(1 < count($entities)){
+                            $value = [];
+                            foreach ($entities as $entity) {
+                                $value[] = $entity->getTitle();
+                            }
+                        } elseif(1 == count($entities)){
+                            $entity = array_shift($entities);
+                            $value = $entity->getTitle();
+                        } else {
+                            $value = null;
+                        }
+
+                    } elseif('taxonomy_term' == $target_type) {
+                        $entities = Term::loadMultiple($ids);
+
+                        foreach ($entities as $entity) {
+                            $value[] = $entity->getName();
+                        }
+
                     }
+
                     break;
                 case 'daterange':
                     $valuesArray = $field->getValue();
