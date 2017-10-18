@@ -89,8 +89,23 @@ class ValueHandler extends BaseValueHandler {
                         $value[] = $term->getName();
                     }
                     break;
+                case 'daterange':
+                    $valuesArray = $field->getValue();
+                    foreach ($valuesArray as $v) {
+                        $value[] = ['startDate' => $v['value'], 'endDate' => $v['end_value']];
+                    }
+                    break;
                 default:
-                    $value = $field->value;
+                    $valuesArray = $field->getValue();
+
+                    if(1 == count($valuesArray)) {
+                        $value = $valuesArray[0]['value'];
+                    } elseif (1 < count($valuesArray)) {
+                        $value = [];
+                        foreach ($valuesArray as $v) {
+                            $value[] = $v['value'];
+                        }
+                    }
             }
 
         }
