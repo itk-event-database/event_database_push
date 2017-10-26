@@ -3,7 +3,9 @@
 namespace Drupal\event_database_push\Service;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\Entity\Term;
 use Itk\EventDatabaseClient\ObjectTransformer\ValueHandler as BaseValueHandler;
 
 class ValueHandler extends BaseValueHandler {
@@ -65,11 +67,64 @@ class ValueHandler extends BaseValueHandler {
 
             switch ($fieldDefinition->getType()) {
                 case 'image':
-                    $uri = $field->entity->getFileUri();
-                    $value = file_create_url($uri);
+                    $uri = empty($field->entity) ? null : $field->entity->getFileUri();
+                    $value = empty($uri) ? null : file_create_url($uri);
+                    break;
+                case 'link':
+                    $value = $field->uri;
+                    break;
+                case 'entity_reference':
+                    $id_array = $field->getValue();
+                    $target_type = $fieldDefinition->getItemDefinition()->getSetting('target_type');
+                    $ids = [];
+                    foreach ($id_array as $array) {
+                        foreach (array_values($array) as $id) {
+                            $ids[] = $id;
+                        };
+                    }
+
+                    if('node' == $target_type) {
+                        $entities = Node::loadMultiple($ids);
+
+                        if(1 < count($entities)){
+                            $value = [];
+                            foreach ($entities as $entity) {
+                                $value[] = $entity->getTitle();
+                            }
+                        } elseif(1 == count($entities)){
+                            $entity = array_shift($entities);
+                            $value = $entity->getTitle();
+                        } else {
+                            $value = null;
+                        }
+
+                    } elseif('taxonomy_term' == $target_type) {
+                        $entities = Term::loadMultiple($ids);
+
+                        foreach ($entities as $entity) {
+                            $value[] = $entity->getName();
+                        }
+
+                    }
+
+                    break;
+                case 'daterange':
+                    $valuesArray = $field->getValue();
+                    foreach ($valuesArray as $v) {
+                        $value[] = ['startDate' => $v['value'], 'endDate' => $v['end_value']];
+                    }
                     break;
                 default:
-                    $value = $field->value;
+                    $valuesArray = $field->getValue();
+
+                    if(1 == count($valuesArray)) {
+                        $value = $valuesArray[0]['value'];
+                    } elseif (1 < count($valuesArray)) {
+                        $value = [];
+                        foreach ($valuesArray as $v) {
+                            $value[] = $v['value'];
+                        }
+                    }
             }
 
         }

@@ -1,0 +1,7 @@
+api:
+  url: settings_override
+  username: settings_override
+  password: settings_override
+mapping:
+  content_types: "event:\r\n type: event\r\n mapping:\r\n  name: title\r\n  excerpt: field_lead\r\n  description: body\r\n  image: field_artist_image\r\n  tags: field_tags\r\n  ticketPurchaseUrl: field_ticket_link\r\n  eventUrl: field_facebook_link\r\n  videoUrl: field_video\r\n  occurrences: field_start_end_time\r\n  ticketPriceRange: field_ticket_price_range\r\n defaults:\r\n   occurrences:\r\n    place:\r\n      id: /api/places/11938\r\n      name: Dokk1\r\n   organizer:\r\n      id: /api/organizers/122"
+langcode: da
