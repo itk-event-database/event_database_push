@@ -24,39 +24,6 @@ function event_database_push_help($route_name, RouteMatchInterface $route_match)
   }
 }
 
-/**
- * Implements hook_schema().
- */
-function event_database_push_schema() {
-	$schema = [];
-
-	$schema['event_database_push_data'] = [
-		'description' => 'Stores information on events pushed to the Event database',
-    'fields' => [
-      'type' => [
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-        'description' => "The Event's node type",
-			],
-      'nid' => [
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => "The Event's internal node id",
-      ],
-      'data' => [
-        'type' => 'text',
-				'not null' => TRUE,
-        'description' => 'The data',
-			],
-		],
-		'primary key' => ['type', 'nid'],
-	];
-
-	return $schema;
-}
 
 /**
  * Implements hook_node_insert().

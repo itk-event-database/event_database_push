@@ -132,7 +132,7 @@ class Handler {
     } else {
       $apiData = new \stdClass();
       $apiData->created_at = $now;
-      $sql = 'INSERT INTO {event_database_push_data}(type, nid, data) VALUES (:type, :nid, :data)';
+      $sql = 'INSERT INTO {event_database_push_data}(type, nid, data, eid) VALUES (:type, :nid, :data, :eid)';
     }
     $apiData->event = [
       'id' => $event->id,
@@ -142,6 +142,7 @@ class Handler {
       'type' => $node->getType(),
       'nid' => $node->id(),
       'data' => json_encode($apiData),
+      'eid' => $event->id,
     ];
     $this->connection->query($sql, $params);
   }
