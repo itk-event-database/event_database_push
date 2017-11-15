@@ -128,7 +128,7 @@ class Handler {
 
     $apiData = $this->getApiData($node);
     if ($apiData) {
-      $sql = 'UPDATE {event_database_push_data} SET data = :data WHERE type = :type AND nid = :nid';
+      $sql = 'UPDATE {event_database_push_data} SET data = :data WHERE type = :type AND nid = :nid AND eid = :eid';
     } else {
       $apiData = new \stdClass();
       $apiData->created_at = $now;
