@@ -29,6 +29,11 @@ function event_database_push_schema() {
         'not null' => TRUE,
         'description' => 'The data',
       ],
+      'eid' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'description' => "Event db id",
+      ],
     ],
     'primary key' => ['type', 'nid'],
   ];
@@ -47,4 +52,20 @@ function event_database_push_update_8101() {
   );
   $schema = Database::getConnection()->schema();
   $schema->addField('event_database_push_data', 'eid', $spec);
+}
+
+
+/**
+ * Quick fix for Dokk1 release without updated hook_schema().
+ */
+function event_database_push_update_8102() {
+  $spec = array(
+    'type' => 'varchar',
+    'length' => 32,
+    'description' => "Event db id",
+  );
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('event_database_push_data', 'eid')) {
+    $schema->addField('event_database_push_data', 'eid', $spec);
+  }
 }
