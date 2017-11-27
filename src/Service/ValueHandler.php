@@ -114,6 +114,18 @@ class ValueHandler extends BaseValueHandler {
                         $value[] = ['startDate' => $v['value'], 'endDate' => $v['end_value']];
                     }
                     break;
+                case 'boolean':
+                    $valuesArray = $field->getValue();
+
+                    if(1 == count($valuesArray)) {
+                        $value = $valuesArray[0]['value'] ? true : false;
+                    } elseif (1 < count($valuesArray)) {
+                        $value = [];
+                        foreach ($valuesArray as $v) {
+                            $value[] = $v['value'] ? true : false;
+                        }
+                    }
+                    break;
                 default:
                     $valuesArray = $field->getValue();
 
