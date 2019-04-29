@@ -4,7 +4,7 @@
 
 ```
 cd «drupal root»
-composer require drupal/event_database_push:~1.0
+composer require itk-event-database/event_database_push:~1.0
 ```
 
 ## Running tests
