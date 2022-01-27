@@ -3,7 +3,7 @@ namespace Drupal\event_database_push\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,9 +17,9 @@ class SettingsForm extends ConfigFormBase {
   /**
    * Drupal\Core\Entity\EntityManager definition.
    *
-   * @var \Drupal\Core\Entity\EntityManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * Drupal\Core\Entity\EntityFieldManager definition.
@@ -28,16 +28,16 @@ class SettingsForm extends ConfigFormBase {
    */
   protected $entityFieldManager;
 
-  public function __construct(ConfigFactoryInterface $config_factory, EntityManager $entity_manager, EntityFieldManager $entity_field_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, EntityFieldManager $entity_field_manager) {
     parent::__construct($config_factory);
-    $this->entityManager = $entity_manager;
+    $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
   }
 
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity_field.manager')
     );
   }
