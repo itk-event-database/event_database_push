@@ -5,6 +5,7 @@ namespace Drupal\event_database_push\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Itk\EventDatabaseClient\Client;
@@ -19,11 +20,13 @@ class Handler {
   protected $configuration;
   protected $connection;
   protected $logger;
+  protected $messenger;
 
-  public function __construct(ConfigFactoryInterface $configFactory, Connection $connection, LoggerInterface $logger) {
+  public function __construct(ConfigFactoryInterface $configFactory, Connection $connection, LoggerInterface $logger, MessengerInterface $messenger) {
     $this->configuration = $configFactory->get('event_database_push.settings');
     $this->connection = $connection;
     $this->logger = $logger;
+    $this->messenger = $messenger;
   }
 
   public function handle(EntityInterface $node, $action) {
@@ -44,7 +47,7 @@ class Handler {
             $this->deleteApiData($node);
             $this->logger->info(t('Event "@title" (@id; @apiEventId) deleted from Event database', ['@title' => $node->title->value, '@id' => $node->id(), '@apiEventId' => $event->id]));
           } else {
-            drupal_set_message(t('Error deleting event "@title" from Event database', ['@title' => $node->title->value]), 'error');
+            $this->messenger->addMessage(t('Error deleting event "@title" from Event database', ['@title' => $node->title->value]), 'error');
             $this->logger->error(t('Error deleting event "@title" (@id) from Event database', ['@title' => $node->title->value, '@id' => $node->id()]));
           }
         }
@@ -56,7 +59,7 @@ class Handler {
         if ($event) {
           $this->logger->info(t('Event "@title" (@id; @apiEventId) created in Event database', ['@title' => $node->title->value, '@id' => $node->id(), '@apiEventId' => $event->id]));
         } else {
-          drupal_set_message(t('Cannot create event "@title" in Event database', ['@title' => $node->title->value]), 'error');
+          $this->messenger->addMessage(t('Cannot create event "@title" in Event database', ['@title' => $node->title->value]), 'error');
           $this->logger->error(t('Cannot create event "@title" (@id) in Event database', ['@title' => $node->title->value, '@id' => $node->id()]));
           return;
         }
@@ -71,7 +74,7 @@ class Handler {
           if ($success) {
             $this->logger->info(t('Event "@title" (@id; @apiEventId) updated in Event database', ['@title' => $node->title->value, '@id' => $node->id(), '@apiEventId' => $event->id]));
           } else {
-            drupal_set_message(t('Cannot update event "@title" in Event database', ['@title' => $node->title->value]), 'error');
+            $this->messenger->addMessage(t('Cannot update event "@title" in Event database', ['@title' => $node->title->value]), 'error');
             $this->logger->error(t('Cannot update event "@title" (@id; @apiEventId) in Event database', ['@title' => $node->title->value, '@id' => $node->id(), '@apiEventId' => $event->id]));
           }
         } else {
@@ -85,7 +88,7 @@ class Handler {
             ]));
           }
           else {
-            drupal_set_message(t('Cannot create event "@title" in Event database', ['@title' => $node->title->value]), 'error');
+            $this->messenger->addMessage(t('Cannot create event "@title" in Event database', ['@title' => $node->title->value]), 'error');
             $this->logger->error(t('Cannot create event "@title" (@id; @apiEventId) in Event database', [
               '@title' => $node->title->value,
               '@id' => $node->id(),

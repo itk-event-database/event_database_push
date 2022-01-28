@@ -4,8 +4,7 @@
 
 ```
 cd «drupal root»
-composer config repositories.itk composer https://packagist.etek.dk/
-composer require drupal/event_database_push:~1.0
+composer require itk-event-database/event_database_push:~1.0
 ```
 
 ## Running tests
