@@ -29,6 +29,11 @@ function event_database_push_schema() {
         'not null' => TRUE,
         'description' => 'The data',
       ],
+      'eid' => [
+        'type' => 'varchar',   
+        'length' => 32,
+        'description' => "Event db id",
+      ]
     ],
     'primary key' => ['type', 'nid'],
   ];
@@ -40,6 +45,19 @@ function event_database_push_schema() {
  * Add event db id column.
  */
 function event_database_push_update_8101() {
+  $spec = array(
+    'type' => 'varchar',
+    'length' => 32,
+    'description' => "Event db id",
+  );
+  $schema = Database::getConnection()->schema();
+  $schema->addField('event_database_push_data', 'eid', $spec);
+}
+
+/**
+ * Add event db id column again, this time with hook_schema update as well.
+ */
+function event_database_push_update_9101() {
   $spec = array(
     'type' => 'varchar',
     'length' => 32,
