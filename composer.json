@@ -1,6 +1,6 @@
 {
-    "name": "drupal/event_database_push",
-    "description": "Push events to Event database API",
+    "name": "itk-event-database/event_database_push",
+    "description": "Drupal 8 module for push events to Event database API",
     "type": "drupal-module",
     "keywords": ["Drupal"],
     "license": "GPL-2.0+",

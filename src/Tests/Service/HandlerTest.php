@@ -2,9 +2,8 @@
 
 namespace Drupal\event_database_push\Tests\Service;
 
-use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\node\Entity\Node;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Itk\EventDatabaseClient\Client;
 
 /**
@@ -13,7 +12,10 @@ use Itk\EventDatabaseClient\Client;
  *
  * @group event_database_push
  */
-class HandlerTest extends WebTestBase  {
+class HandlerTest extends BrowserTestBase {
+
+  protected $defaultTheme = 'stark';
+
   public static $modules = [
     'user',
     'system',
@@ -25,17 +27,20 @@ class HandlerTest extends WebTestBase  {
     'event_database_push',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   public function setUp() {
     parent::setUp();
     $config = $this->config('event_database_push.settings');
     $config->setData([
-        'api' => [
-          'url' => 'http://event-database-api.vm/api',
-          'username' => 'api-write',
-          'password' => 'apipass',
-        ],
-        'mapping' => [
-          'content_types' => '
+      'api' => [
+        'url' => 'http://event-database-api.vm/api',
+        'username' => 'api-write',
+        'password' => 'apipass',
+      ],
+      'mapping' => [
+        'content_types' => '
 event:
  type: event
  mapping:
@@ -56,9 +61,9 @@ room:
  mapping:
   name: name
 ',
-        ],
-        'feed' => [
-          'content_types' => '
+      ],
+      'feed' => [
+        'content_types' => '
 event:
  type: event
  mapping:
@@ -77,17 +82,20 @@ room:
  mapping:
   name: name
 ',
-        ],
-      ]);
+      ],
+    ]);
     $config->save();
   }
 
+  /**
+   * Create a test event.
+   */
   public function testCreateEvent() {
     $client = new Client('http://event-database-api.vm/api', 'api-write', 'apipass');
 
     $name = uniqid(__FUNCTION__) . ' ' . date('c');
 
-    // Test that creating and saving a node creates an Event with the API
+    // Test that creating and saving a node creates an Event with the API.
     $numberOfEvents = $client->getEvents()->getCount();
 
     $event = Node::create([
@@ -102,7 +110,7 @@ room:
     $this->assertEqual(1, count($events));
     $this->assertEqual($name, $events[0]->getName());
 
-    // Test that renaming the node also renames in the API
+    // Test that renaming the node also renames in the API.
     $newName = uniqid(__FUNCTION__) . ' ' . date('c');
 
     $event = Node::load($event->id());
@@ -117,4 +125,5 @@ room:
 
     $this->assertEqual(0, $client->getEvents(['name' => $newName])->getCount());
   }
+
 }

@@ -5,4 +5,4 @@ services:
 
   event_database_push.handler:
     class: Drupal\event_database_push\Service\Handler
-    arguments: [ '@config.factory', '@database', '@logger.channel.event_database_push' ]
+    arguments: [ '@config.factory', '@database', '@logger.channel.event_database_push', '@messenger' ]
