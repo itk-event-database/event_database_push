@@ -10,8 +10,13 @@ use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
+ *
+ * @phpstan-param $route_name<string>
+ *   Thr route name.
+ *
+ * @phpstan-return $output<string>
  */
-function event_database_push_help($route_name): string {
+function event_database_push_help($route_name): ?string {
   switch ($route_name) {
     // Main module help for the event_database_push module.
     case 'help.page.event_database_push':
