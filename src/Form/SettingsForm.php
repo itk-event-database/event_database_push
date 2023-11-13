@@ -60,6 +60,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    *
    * @phpstan-param $form array<string, mixed>
+   * @phpstan-return array<string, mixed>
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
@@ -114,7 +115,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    *
-   * @phpstan-param $form array<string, mixed>
+   * @phpstan-param array<string, mixed> $form
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     try {
@@ -129,7 +130,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    *
-   * @phpstan-param $form array<string, mixed>
+   * @phpstan-param array<string, mixed> $form
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $config = $this->config('event_database_push.settings');
