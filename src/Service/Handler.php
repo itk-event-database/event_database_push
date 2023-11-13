@@ -160,7 +160,7 @@ class Handler {
             $this->logger->error($this->t('Cannot create event "@title" (@id; @apiEventId) in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event?->getItemId(),
+              '@apiEventId' => isset($event) ? $event->getItemId() : '',
             ]));
             return;
           }

@@ -2,6 +2,7 @@
 
 namespace Drupal\event_database_push\Service;
 
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -20,7 +21,7 @@ class ValueHandler extends BaseValueHandler {
    * @param string $path
    *
    * @return array|bool|mixed|string|null
-   * 
+   *
    * @throws \Exception
    */
   public function getValue($item, $path) {
@@ -78,7 +79,7 @@ class ValueHandler extends BaseValueHandler {
   /**
    * Get serialized field value.
    *
-   * @param \Drupal\Core\Field\FieldItemListInterface $field
+   * @param \Drupal\Core\Field\FieldItemListInterface<FieldItemInterface> $field
    *   The field.
    *
    * @return null|string
