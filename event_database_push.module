@@ -5,18 +5,13 @@
  * Contains event_database_push.module..
  */
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_help().
- *
- * @phpstan-param $route_name<string>
- *   Thr route name.
- *
- * @phpstan-return $output<string>
  */
-function event_database_push_help($route_name): ?string {
+function event_database_push_help(string $route_name): ?string {
   switch ($route_name) {
     // Main module help for the event_database_push module.
     case 'help.page.event_database_push':
@@ -33,7 +28,7 @@ function event_database_push_help($route_name): ?string {
 /**
  * Implements hook_node_insert().
  */
-function event_database_push_node_insert(EntityInterface $node): void {
+function event_database_push_node_insert(NodeInterface $node): void {
   $handler = \Drupal::service('event_database_push.handler');
   $handler->handle($node, 'insert');
 }
@@ -41,7 +36,7 @@ function event_database_push_node_insert(EntityInterface $node): void {
 /**
  * Implements hook_node_update().
  */
-function event_database_push_node_update(EntityInterface $node): void {
+function event_database_push_node_update(NodeInterface $node): void {
   $handler = \Drupal::service('event_database_push.handler');
   $handler->handle($node, 'update');
 }
@@ -49,7 +44,7 @@ function event_database_push_node_update(EntityInterface $node): void {
 /**
  * Implements hook_node_delete().
  */
-function event_database_push_node_delete(EntityInterface $node): void {
+function event_database_push_node_delete(NodeInterface $node): void {
   $handler = \Drupal::service('event_database_push.handler');
   $handler->handle($node, 'delete');
 }
