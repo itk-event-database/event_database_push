@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_help().
  */
-function event_database_push_help(string $route_name): ?string {
+function event_database_push_help(string $route_name): string {
   switch ($route_name) {
     // Main module help for the event_database_push module.
     case 'help.page.event_database_push':
