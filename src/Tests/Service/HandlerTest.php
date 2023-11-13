@@ -39,7 +39,7 @@ class HandlerTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $config = $this->config('event_database_push.settings');
     $config->setData([
