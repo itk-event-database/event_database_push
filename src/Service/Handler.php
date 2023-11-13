@@ -64,7 +64,7 @@ class Handler {
               $this->t('Event "@title" (@id; @apiEventId) deleted from Event database', [
                 '@title' => $node->getTitle(),
                 '@id' => $node->id(),
-                '@apiEventId' => $event->id,
+                '@apiEventId' => $event->getItemId(),
               ])
             );
           }
@@ -91,7 +91,7 @@ class Handler {
             $this->t('Event "@title" (@id; @apiEventId) created in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event->id,
+              '@apiEventId' => $event->getItemId(),
             ]
             )
           );
@@ -123,7 +123,7 @@ class Handler {
               $this->t('Event "@title" (@id; @apiEventId) updated in Event database', [
                 '@title' => $node->getTitle(),
                 '@id' => $node->id(),
-                '@apiEventId' => $event->id,
+                '@apiEventId' => $event->getItemId(),
               ]
               )
             );
@@ -137,7 +137,7 @@ class Handler {
               $this->t('Cannot update event "@title" (@id; @apiEventId) in Event database', [
                 '@title' => $node->getTitle(),
                 '@id' => $node->id(),
-                '@apiEventId' => $event->id,
+                '@apiEventId' => $event->getItemId(),
               ])
             );
           }
@@ -149,7 +149,7 @@ class Handler {
             $this->logger->info($this->t('Event "@title" (@id; @apiEventId) created in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event->id,
+              '@apiEventId' => $event->getItemId(),
             ]));
           }
           else {
@@ -160,7 +160,7 @@ class Handler {
             $this->logger->error($this->t('Cannot create event "@title" (@id; @apiEventId) in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event->id,
+              '@apiEventId' => $event->getItemId(),
             ]));
             return;
           }
@@ -240,7 +240,7 @@ class Handler {
       'type' => $node->getType(),
       'nid' => $node->id(),
       'data' => json_encode($apiData),
-      'eid' => $event->id,
+      'eid' => $event->getItemId(),
     ];
     $this->connection->query($sql, $params);
   }
