@@ -9,6 +9,8 @@ use Drupal\Core\Database\Database;
 
 /**
  * Implements hook_schema().
+ *
+ * @return array<string, mixed>
  */
 function event_database_push_schema() {
   $schema = [];
@@ -49,7 +51,7 @@ function event_database_push_schema() {
 /**
  * Add event db id column.
  */
-function event_database_push_update_8101() {
+function event_database_push_update_8101(): void {
   $spec = [
     'type' => 'varchar',
     'length' => 32,
@@ -62,7 +64,7 @@ function event_database_push_update_8101() {
 /**
  * Add event db id column again, this time with hook_schema update as well.
  */
-function event_database_push_update_9102() {
+function event_database_push_update_9102(): void {
   $spec = [
     'type' => 'varchar',
     'length' => 32,
