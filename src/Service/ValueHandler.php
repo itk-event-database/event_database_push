@@ -15,6 +15,13 @@ class ValueHandler extends BaseValueHandler {
 
   /**
    * Get a value.
+   *
+   * @param ?NodeInterface $item
+   * @param string $path
+   *
+   * @return array|bool|mixed|string|null
+   * 
+   * @throws \Exception
    */
   public function getValue($item, $path) {
     if ($item instanceof NodeInterface) {

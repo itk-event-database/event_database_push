@@ -160,7 +160,7 @@ class Handler {
             $this->logger->error($this->t('Cannot create event "@title" (@id; @apiEventId) in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event->getItemId(),
+              '@apiEventId' => $event?->getItemId(),
             ]));
             return;
           }
@@ -176,7 +176,7 @@ class Handler {
    * @param \Drupal\node\NodeInterface $node
    *   The node to get event data for.
    *
-   * @return array
+   * @return array<string, mixed>
    *   The event data.
    */
   private function getEventData(NodeInterface $node) {
@@ -233,7 +233,7 @@ class Handler {
       $sql = 'INSERT INTO {event_database_push_data}(type, nid, data, eid) VALUES (:type, :nid, :data, :eid)';
     }
     $apiData->event = [
-      'id' => $event->id,
+      'id' => $event->getItemId(),
     ];
     $apiData->updated_at = $now;
     $params = [
