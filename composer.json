@@ -3,7 +3,7 @@
     "description": "Drupal 8 module for push events to Event database API",
     "type": "drupal-module",
     "keywords": ["Drupal"],
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "itk-event-database/event-database-client": "^1.2"
     },
