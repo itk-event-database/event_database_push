@@ -59,7 +59,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    *
-   * @phpstan-param $form array<string, mixed>
+   * @phpstan-param array<string, mixed> $form
    * @phpstan-return array<string, mixed>
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
