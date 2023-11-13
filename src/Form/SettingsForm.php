@@ -41,7 +41,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * Create method for SettingsForm class.
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): SettingsForm|ConfigFormBase|static {
     return new static(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
@@ -58,6 +58,8 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param $form array<string, mixed>
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
@@ -111,8 +113,10 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param $form array<string, mixed>
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     try {
       $value = $form_state->getValue(['mapping', 'content_types']);
       Yaml::parse($value);
@@ -124,8 +128,10 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param $form array<string, mixed>
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $config = $this->config('event_database_push.settings');
 
     $config->set('api.url', $form_state->getValue(['api', 'url']));
@@ -135,12 +141,12 @@ class SettingsForm extends ConfigFormBase {
     $config->set('mapping.content_types', $form_state->getValue(['mapping', 'content_types']));
 
     $config->save();
-
-    return parent::submitForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-return array<int, mixed>
    */
   protected function getEditableConfigNames() {
     return [
