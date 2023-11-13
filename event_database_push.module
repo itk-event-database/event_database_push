@@ -24,31 +24,24 @@ function event_database_push_help($route_name, RouteMatchInterface $route_match)
   }
 }
 
-
 /**
  * Implements hook_node_insert().
- *
- * @param \Drupal\Core\Entity\EntityInterface $node
  */
 function event_database_push_node_insert(EntityInterface $node) {
-	$handler = \Drupal::service('event_database_push.handler');
-	$handler->handle($node, 'insert');
+  $handler = \Drupal::service('event_database_push.handler');
+  $handler->handle($node, 'insert');
 }
 
 /**
  * Implements hook_node_update().
- *
- * @param \Drupal\Core\Entity\EntityInterface $node
  */
 function event_database_push_node_update(EntityInterface $node) {
-	$handler = \Drupal::service('event_database_push.handler');
-	$handler->handle($node, 'update');
+  $handler = \Drupal::service('event_database_push.handler');
+  $handler->handle($node, 'update');
 }
 
 /**
  * Implements hook_node_delete().
- *
- * @param \Drupal\Core\Entity\EntityInterface $node
  */
 function event_database_push_node_delete(EntityInterface $node) {
   $handler = \Drupal::service('event_database_push.handler');

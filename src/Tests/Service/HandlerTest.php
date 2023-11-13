@@ -7,15 +7,24 @@ use Drupal\Tests\BrowserTestBase;
 use Itk\EventDatabaseClient\Client;
 
 /**
- * Functional test for the Event push handler
- * (cf. https://api.drupal.org/api/drupal/core!core.api.php/group/testing/8.1.x#write_functional)
+ * Functional test for the Event push handler.
  *
  * @group event_database_push
  */
 class HandlerTest extends BrowserTestBase {
 
+  /**
+   * Default theme.
+   *
+   * @var string
+   */
   protected $defaultTheme = 'stark';
 
+  /**
+   * List of modules.
+   *
+   * @var string[]
+   */
   public static $modules = [
     'user',
     'system',

@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\event_database_push\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -28,12 +29,18 @@ class SettingsForm extends ConfigFormBase {
    */
   protected $entityFieldManager;
 
+  /**
+   * Constructor for settingsForm class.
+   */
   public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, EntityFieldManager $entity_field_manager) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
   }
 
+  /**
+   * Create method for SettingsForm class.
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
@@ -58,10 +65,10 @@ class SettingsForm extends ConfigFormBase {
 
     $form['api'] = [
       '#type' => 'fieldset',
-      '#title' => t('API'),
+      '#title' => $this->t('API'),
       '#tree' => TRUE,
 
-          'url' => [
+      'url' => [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Url'),
@@ -86,7 +93,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['mapping'] = [
       '#type' => 'fieldset',
-      '#title' => t('Mapping'),
+      '#title' => $this->t('Mapping'),
       '#tree' => TRUE,
 
       'content_types' => [
@@ -109,7 +116,8 @@ class SettingsForm extends ConfigFormBase {
     try {
       $value = $form_state->getValue(['mapping', 'content_types']);
       Yaml::parse($value);
-    } catch (ParseException $ex) {
+    }
+    catch (ParseException $ex) {
       $form_state->setError($form['mapping']['content_types'], $this->t('Content types must be valid YAML (@message)', ['@message' => $ex->getMessage()]));
     }
   }
@@ -139,4 +147,5 @@ class SettingsForm extends ConfigFormBase {
       'event_database_push.settings',
     ];
   }
+
 }

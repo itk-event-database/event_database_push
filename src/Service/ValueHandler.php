@@ -165,8 +165,9 @@ class ValueHandler extends BaseValueHandler {
                 $value[] = ['name' => $v['value']];
               }
               break;
+
             case 'field_organiser':
-                $value = ['name' => $field->getValue()[0]['value']];
+              $value = ['name' => $field->getValue()[0]['value']];
               break;
 
             default:
