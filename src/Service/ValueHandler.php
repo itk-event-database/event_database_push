@@ -88,126 +88,123 @@ class ValueHandler extends BaseValueHandler {
   private function getSerializedValueByType(FieldItemListInterface $field) {
     $value = NULL;
 
-    if ($field) {
-      $fieldDefinition = $field->getFieldDefinition();
+    $fieldDefinition = $field->getFieldDefinition();
 
-      switch ($fieldDefinition->getType()) {
-        case 'image':
-          $uri = empty($field->entity) ? NULL : $field->entity->getFileUri();
-          $value = empty($uri) ? NULL : file_create_url($uri);
-          break;
+    switch ($fieldDefinition->getType()) {
+      case 'image':
+        $uri = empty($field->entity) ? NULL : $field->entity->getFileUri();
+        $value = empty($uri) ? NULL : \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+        break;
 
-        case 'link':
-          $value = $field->uri;
-          break;
+      case 'link':
+        $value = $field->getValue()[0]['uri'];
+        break;
 
-        case 'entity_reference':
-          $id_array = $field->getValue();
-          $target_type = $fieldDefinition->getItemDefinition()->getSetting('target_type');
-          $ids = [];
-          foreach ($id_array as $array) {
-            foreach (array_values($array) as $id) {
-              $ids[] = $id;
-            };
-          }
+      case 'entity_reference':
+        $id_array = $field->getValue();
+        $target_type = $fieldDefinition->getItemDefinition()->getSetting('target_type');
+        $ids = [];
+        foreach ($id_array as $array) {
+          foreach (array_values($array) as $id) {
+            $ids[] = $id;
+          };
+        }
 
-          if ('node' == $target_type) {
-            $entities = Node::loadMultiple($ids);
+        if ('node' == $target_type) {
+          $entities = Node::loadMultiple($ids);
 
-            if (1 < count($entities)) {
-              $value = [];
-              foreach ($entities as $entity) {
-                $value[] = $entity->getTitle();
-              }
-            }
-            elseif (1 == count($entities)) {
-              $entity = array_shift($entities);
-              $value = $entity->getTitle();
-            }
-            else {
-              $value = NULL;
-            }
-
-          }
-          elseif ('taxonomy_term' == $target_type) {
-            $entities = Term::loadMultiple($ids);
-
+          if (1 < count($entities)) {
+            $value = [];
             foreach ($entities as $entity) {
-              $value[] = $entity->getName();
+              $value[] = $entity->getTitle();
             }
-
+          }
+          elseif (1 == count($entities)) {
+            $entity = array_shift($entities);
+            $value = $entity->getTitle();
+          }
+          else {
+            $value = NULL;
           }
 
-          break;
+        }
+        elseif ('taxonomy_term' == $target_type) {
+          $entities = Term::loadMultiple($ids);
 
-        case 'daterange':
-          $valuesArray = $field->getValue();
+          foreach ($entities as $entity) {
+            $value[] = $entity->getName();
+          }
+
+        }
+
+        break;
+
+      case 'daterange':
+        $valuesArray = $field->getValue();
+        foreach ($valuesArray as $v) {
+          $value[] = [
+            'startDate' => $v['value'],
+            'endDate' => $v['end_value'],
+          ];
+        }
+        break;
+
+      case 'boolean':
+        $valuesArray = $field->getValue();
+
+        if (1 == count($valuesArray)) {
+          $value = $valuesArray[0]['value'] ? TRUE : FALSE;
+        }
+        elseif (1 < count($valuesArray)) {
+          $value = [];
           foreach ($valuesArray as $v) {
-            $value[] = [
-              'startDate' => $v['value'],
-              'endDate' => $v['end_value'],
-            ];
+            $value[] = $v['value'] ? TRUE : FALSE;
           }
-          break;
+        }
+        break;
 
-        case 'boolean':
-          $valuesArray = $field->getValue();
-
-          if (1 == count($valuesArray)) {
-            $value = $valuesArray[0]['value'] ? TRUE : FALSE;
-          }
-          elseif (1 < count($valuesArray)) {
-            $value = [];
-            foreach ($valuesArray as $v) {
-              $value[] = $v['value'] ? TRUE : FALSE;
+      case 'string':
+        $fieldName = $field->getName();
+        switch ($fieldName) {
+          case 'field_partner_organizers':
+            $fieldValues = $field->getValue();
+            foreach ($fieldValues as $v) {
+              $value[] = ['name' => $v['value']];
             }
-          }
-          break;
+            break;
 
-        case 'string':
-          $fieldName = $field->getName();
-          switch ($fieldName) {
-            case 'field_partner_organizers':
-              $fieldValues = $field->getValue();
-              foreach ($fieldValues as $v) {
-                $value[] = ['name' => $v['value']];
-              }
-              break;
+          case 'field_organiser':
+            $value = ['name' => $field->getValue()[0]['value']];
+            break;
 
-            case 'field_organiser':
-              $value = ['name' => $field->getValue()[0]['value']];
-              break;
+          default:
+            $valuesArray = $field->getValue();
 
-            default:
-              $valuesArray = $field->getValue();
-
-              if (1 == count($valuesArray)) {
-                $value = $valuesArray[0]['value'];
-              }
-              elseif (1 < count($valuesArray)) {
-                $value = [];
-                foreach ($valuesArray as $v) {
-                  $value[] = $v['value'];
-                }
-              }
-              break;
-          }
-          break;
-
-        default:
-          $valuesArray = $field->getValue();
-
-          if (1 == count($valuesArray)) {
-            $value = $valuesArray[0]['value'];
-          }
-          elseif (1 < count($valuesArray)) {
-            $value = [];
-            foreach ($valuesArray as $v) {
-              $value[] = $v['value'];
+            if (1 == count($valuesArray)) {
+              $value = $valuesArray[0]['value'];
             }
-          }
-      }
+            elseif (1 < count($valuesArray)) {
+              $value = [];
+              foreach ($valuesArray as $v) {
+                $value[] = $v['value'];
+              }
+            }
+            break;
+        }
+        break;
 
+      default:
+        $valuesArray = $field->getValue();
+
+        if (1 == count($valuesArray)) {
+          $value = $valuesArray[0]['value'];
+        }
+        elseif (1 < count($valuesArray)) {
+          $value = [];
+          foreach ($valuesArray as $v) {
+            $value[] = $v['value'];
+          }
+        }
     }
 
     return $value;
@@ -217,7 +214,7 @@ class ValueHandler extends BaseValueHandler {
    * Make a URL absolute.
    */
   public function makeUrlAbsolute($value) {
-    return file_create_url($value);
+    return \Drupal::service('file_url_generator')->generateAbsoluteString($value);
   }
 
 }
