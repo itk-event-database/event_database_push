@@ -10,6 +10,12 @@ use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_help().
+ *
+ * @param string $route_name
+ *   The route name.
+ *
+ * @return string
+ *   The help message.
  */
 function event_database_push_help(string $route_name): string {
   switch ($route_name) {
