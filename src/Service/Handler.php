@@ -23,6 +23,13 @@ class Handler {
   use StringTranslationTrait;
 
   /**
+   * The configuration
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  private \Drupal\Core\Config\ImmutableConfig $configuration;
+
+  /**
    * Constructor for Handler class.
    */
   public function __construct(protected ConfigFactoryInterface $configFactory, protected Connection $connection, protected LoggerInterface $logger, protected MessengerInterface $messenger) {
