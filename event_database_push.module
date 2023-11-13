@@ -12,16 +12,18 @@ use Drupal\node\NodeInterface;
  * Implements hook_help().
  */
 function event_database_push_help(string $route_name): string {
+  $output = '';
   switch ($route_name) {
     // Main module help for the event_database_push module.
     case 'help.page.event_database_push':
-      $output = '';
+
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('Push events to Event API') . '</p>';
 
       return $output;
 
     default:
+      return $output;
   }
 }
 
