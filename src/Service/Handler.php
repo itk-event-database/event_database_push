@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\File\FileUrlGenerator;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -33,7 +34,13 @@ class Handler {
   /**
    * Constructor for Handler class.
    */
-  public function __construct(protected ConfigFactoryInterface $configFactory, protected Connection $connection, protected LoggerInterface $logger, protected MessengerInterface $messenger) {
+  public function __construct(
+    protected ConfigFactoryInterface $configFactory,
+    protected Connection $connection,
+    protected LoggerInterface $logger,
+    protected MessengerInterface $messenger,
+    protected FileUrlGenerator $fileUrlGenerator
+  ) {
     $this->configuration = $configFactory->get('event_database_push.settings');
   }
 
@@ -180,7 +187,7 @@ class Handler {
    *   The event data.
    */
   private function getEventData(NodeInterface $node) {
-    $valueHandler = new ValueHandler();
+    $valueHandler = new ValueHandler($this->fileUrlGenerator);
     $transformer = new ObjectTransformer($valueHandler);
     $config = $this->getMapping($node);
 

@@ -4,7 +4,7 @@ services:
     arguments: ['event_database_push']
 
   Drupal\event_database_push\Service\Handler:
-    arguments: ['@config.factory', '@database', '@logger.channel.event_database_push', '@messenger']
+    arguments: ['@config.factory', '@database', '@logger.channel.event_database_push', '@messenger', '@file_url_generator']
 
   Drupal\event_database_push\Service\ValueHandler:
     arguments: ['@file_url_generator']

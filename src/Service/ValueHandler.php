@@ -23,8 +23,9 @@ class ValueHandler extends BaseValueHandler {
    * @param \Drupal\Core\File\FileUrlGenerator $fileUrlGenerator
    *   The fileUrlGenerator.
    */
-  public function __construct(protected FileUrlGenerator $fileUrlGenerator) {
-  }
+  public function __construct(
+    protected FileUrlGenerator $fileUrlGenerator
+  ) {}
 
   /**
    * Get a value.
