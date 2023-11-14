@@ -216,8 +216,14 @@ class ValueHandler extends BaseValueHandler {
 
   /**
    * Make a URL absolute.
+   *
+   * @param string $value
+   *  A uri.
+   *
+   * @return string
+   *   An absolute url.
    */
-  public function makeUrlAbsolute($value) {
+  public function makeUrlAbsolute($value): string {
     return \Drupal::service('file_url_generator')->generateAbsoluteString($value);
   }
 
