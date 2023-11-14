@@ -4,6 +4,7 @@ namespace Drupal\event_database_push\Service;
 
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -82,17 +83,20 @@ class ValueHandler extends BaseValueHandler {
    * @param \Drupal\Core\Field\FieldItemListInterface<FieldItemInterface> $field
    *   The field.
    *
-   * @return null|string
+   * @return bool|array|string|null The serialized value.
    *   The serialized value.
    */
-  private function getSerializedValueByType(FieldItemListInterface $field) {
+  private function getSerializedValueByType(FieldItemListInterface $field): bool|array|string|null {
     $value = NULL;
 
     $fieldDefinition = $field->getFieldDefinition();
 
     switch ($fieldDefinition->getType()) {
       case 'image':
-        $uri = empty($field->entity) ? NULL : $field->entity->getFileUri();
+        $file = File::load($field->target_id);
+        if ($file) {
+          $uri = empty($file) ? NULL : $file->getFileUri();
+        }
         $value = empty($uri) ? NULL : \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
         break;
 
