@@ -2,6 +2,7 @@
 
 namespace Drupal\event_database_push\Service;
 
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
