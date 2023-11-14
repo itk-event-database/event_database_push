@@ -4,4 +4,4 @@ description: Push events to Event database
 core: 8.x
 package: Event database
 configure: event_database_push.settings
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9 || ^10
