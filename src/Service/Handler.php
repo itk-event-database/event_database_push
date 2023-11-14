@@ -187,6 +187,7 @@ class Handler {
    *   The event data.
    */
   private function getEventData(NodeInterface $node) {
+    // @todo The ValueHandler should probably be dependency injected into this class rather than be created here (and every time getEventData is called). Furthermore, we should only create the ObjectTransformer using the value handler once, e.g. in the constructor where we get the value handler
     $valueHandler = new ValueHandler($this->fileUrlGenerator);
     $transformer = new ObjectTransformer($valueHandler);
     $config = $this->getMapping($node);
