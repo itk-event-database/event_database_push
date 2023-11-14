@@ -3,9 +3,40 @@
     "description": "Drupal 8 module for push events to Event database API",
     "type": "drupal-module",
     "keywords": ["Drupal"],
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "itk-event-database/event-database-client": "^1.2"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "drupal/coder": "^8.3",
+        "mglaman/drupal-check": "^1.4"
+    },
+    "scripts": {
+        "code-analysis/drupal-check": [
+            "vendor/bin/drupal-check --deprecations --analysis --exclude-dir=vendor *.* src"
+        ],
+        "code-analysis": [
+            "@code-analysis/drupal-check"
+        ],
+        "coding-standards-check/phpcs": [
+            "vendor/bin/phpcs --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-apply/phpcs": [
+            "vendor/bin/phpcbf --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
