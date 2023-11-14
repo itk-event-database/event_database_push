@@ -83,10 +83,10 @@ class ValueHandler extends BaseValueHandler {
    * @param \Drupal\Core\Field\FieldItemListInterface<FieldItemInterface> $field
    *   The field.
    *
-   * @return bool|array|string|null<mixed> The serialized value.
+   * @return mixed The serialized value.
    *   The serialized value.
    */
-  private function getSerializedValueByType(FieldItemListInterface $field): bool|array|string|null {
+  private function getSerializedValueByType(FieldItemListInterface $field): mixed {
     $value = NULL;
 
     $fieldDefinition = $field->getFieldDefinition();
