@@ -83,7 +83,7 @@ class ValueHandler extends BaseValueHandler {
    * @param \Drupal\Core\Field\FieldItemListInterface<FieldItemInterface> $field
    *   The field.
    *
-   * @return bool|array|string|null The serialized value.
+   * @return bool|array|string|null<mixed> The serialized value.
    *   The serialized value.
    */
   private function getSerializedValueByType(FieldItemListInterface $field): bool|array|string|null {
@@ -95,9 +95,9 @@ class ValueHandler extends BaseValueHandler {
       case 'image':
         $file = File::load($field->target_id);
         if ($file) {
-          $uri = empty($file) ? NULL : $file->getFileUri();
+          $uri = $file->getFileUri();
+          $value = empty($uri) ? NULL : \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
         }
-        $value = empty($uri) ? NULL : \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
         break;
 
       case 'link':
