@@ -9,12 +9,19 @@ use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\File\FileUrlGenerator;
 use Itk\EventDatabaseClient\ObjectTransformer\ValueHandler as BaseValueHandler;
 
 /**
  * Value handler class.
  */
 class ValueHandler extends BaseValueHandler {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(protected FileUrlGenerator $fileUrlGenerator) {
+  }
 
   /**
    * Get a value.
@@ -100,7 +107,7 @@ class ValueHandler extends BaseValueHandler {
         $file = File::load($field->target_id);
         if ($file) {
           $uri = $file->getFileUri();
-          $value = empty($uri) ? NULL : \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+          $value = empty($uri) ? NULL : $this->fileUrlGenerator->generateAbsoluteString($uri);
         }
         break;
 
@@ -228,7 +235,7 @@ class ValueHandler extends BaseValueHandler {
    *   An absolute url.
    */
   public function makeUrlAbsolute($value): string {
-    return \Drupal::service('file_url_generator')->generateAbsoluteString($value);
+    return $this->fileUrlGenerator->generateAbsoluteString($value);
   }
 
 }

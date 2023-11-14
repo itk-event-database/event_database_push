@@ -188,7 +188,7 @@ class Handler {
 
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()], ['absolute' => TRUE]);
     $data += [
-      'url' => $url->toString(),
+      'url' => $url->toString(TRUE)->getGeneratedUrl(),
     ];
 
     return $data;
