@@ -18,7 +18,10 @@ use Itk\EventDatabaseClient\ObjectTransformer\ValueHandler as BaseValueHandler;
 class ValueHandler extends BaseValueHandler {
 
   /**
-   * {@inheritdoc}
+   * Constructor for value handler.
+   *
+   * @param \Drupal\Core\File\FileUrlGenerator $fileUrlGenerator
+   *   The fileUrlGenerator.
    */
   public function __construct(protected FileUrlGenerator $fileUrlGenerator) {
   }
