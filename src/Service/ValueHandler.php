@@ -5,11 +5,11 @@ namespace Drupal\event_database_push\Service;
 // phpcs:ignore
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileUrlGenerator;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Core\File\FileUrlGenerator;
 use Itk\EventDatabaseClient\ObjectTransformer\ValueHandler as BaseValueHandler;
 
 /**
