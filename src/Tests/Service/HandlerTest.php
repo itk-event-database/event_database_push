@@ -98,8 +98,10 @@ room:
 
   /**
    * Create a test event.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testCreateEvent() {
+  public function testCreateEvent(): void {
     $client = new Client('http://event-database-api.vm/api', 'api-write', 'apipass');
 
     $name = uniqid(__FUNCTION__) . ' ' . date('c');
@@ -112,12 +114,12 @@ room:
       'title' => $name,
     ]);
     $event->save();
-    $this->assertEqual($numberOfEvents + 1, $client->getEvents()->getCount());
+    $this->assertEquals($numberOfEvents + 1, $client->getEvents()->getCount());
 
     // Test that we can get the event (by name)
     $events = $client->getEvents(['name' => $name])->getItems();
-    $this->assertEqual(1, count($events));
-    $this->assertEqual($name, $events[0]->getName());
+    $this->assertEquals(1, count($events));
+    $this->assertEquals($name, $events[0]->getName());
 
     // Test that renaming the node also renames in the API.
     $newName = uniqid(__FUNCTION__) . ' ' . date('c');
@@ -126,13 +128,13 @@ room:
     $event->set('title', $newName);
     $event->save();
 
-    $this->assertEqual(0, $client->getEvents(['name' => $name])->getCount());
-    $this->assertEqual(1, $client->getEvents(['name' => $newName])->getCount());
+    $this->assertEquals(0, $client->getEvents(['name' => $name])->getCount());
+    $this->assertEquals(1, $client->getEvents(['name' => $newName])->getCount());
 
     // Test that deleting the node also deleted in the API.
     $event->delete();
 
-    $this->assertEqual(0, $client->getEvents(['name' => $newName])->getCount());
+    $this->assertEquals(0, $client->getEvents(['name' => $newName])->getCount());
   }
 
 }
