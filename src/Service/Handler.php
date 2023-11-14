@@ -3,6 +3,7 @@
 namespace Drupal\event_database_push\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -23,11 +24,11 @@ class Handler {
   use StringTranslationTrait;
 
   /**
-   * The configuration
+   * The configuration.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  private \Drupal\Core\Config\ImmutableConfig $configuration;
+  private ImmutableConfig $configuration;
 
   /**
    * Constructor for Handler class.
@@ -159,7 +160,7 @@ class Handler {
               ]), 'error');
             $this->logger->error($this->t('Cannot create event "@title" in Event database', [
               '@title' => $node->getTitle(),
-              '@id' => $node->id()
+              '@id' => $node->id(),
             ]));
             return;
           }

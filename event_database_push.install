@@ -8,9 +8,10 @@
 use Drupal\Core\Database\Database;
 
 /**
- * Implements hook_schema().
+ * Implementation of hook_schema().
  *
  * @return array<string, mixed>
+ *   The DB schema.
  */
 function event_database_push_schema() {
   $schema = [];

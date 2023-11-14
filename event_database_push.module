@@ -5,7 +5,6 @@
  * Contains event_database_push.module..
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
 
 /**

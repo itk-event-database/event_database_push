@@ -2,7 +2,6 @@
 
 namespace Drupal\event_database_push\Service;
 
-use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
@@ -19,9 +18,12 @@ class ValueHandler extends BaseValueHandler {
    * Get a value.
    *
    * @param ?NodeInterface $item
+   *   The node to get a value for.
    * @param string $path
+   *   The path to get value by.
    *
    * @return array|bool|mixed|string|null
+   *   The value.
    *
    * @throws \Exception
    */
@@ -83,7 +85,7 @@ class ValueHandler extends BaseValueHandler {
    * @param \Drupal\Core\Field\FieldItemListInterface<FieldItemInterface> $field
    *   The field.
    *
-   * @return mixed The serialized value.
+   * @return mixed
    *   The serialized value.
    */
   private function getSerializedValueByType(FieldItemListInterface $field): mixed {
@@ -218,7 +220,7 @@ class ValueHandler extends BaseValueHandler {
    * Make a URL absolute.
    *
    * @param string $value
-   *  A uri.
+   *   A uri.
    *
    * @return string
    *   An absolute url.
