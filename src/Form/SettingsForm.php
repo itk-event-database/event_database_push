@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\event_database_push\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -28,13 +29,19 @@ class SettingsForm extends ConfigFormBase {
    */
   protected $entityFieldManager;
 
+  /**
+   * Constructor for settingsForm class.
+   */
   public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, EntityFieldManager $entity_field_manager) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
   }
 
-  public static function create(ContainerInterface $container) {
+  /**
+   * Create method for SettingsForm class.
+   */
+  public static function create(ContainerInterface $container): SettingsForm|ConfigFormBase|static {
     return new static(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
@@ -51,6 +58,9 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<string, mixed> $form
+   * @phpstan-return array<string, mixed>
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
@@ -58,10 +68,10 @@ class SettingsForm extends ConfigFormBase {
 
     $form['api'] = [
       '#type' => 'fieldset',
-      '#title' => t('API'),
+      '#title' => $this->t('API'),
       '#tree' => TRUE,
 
-          'url' => [
+      'url' => [
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' => $this->t('Url'),
@@ -86,7 +96,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['mapping'] = [
       '#type' => 'fieldset',
-      '#title' => t('Mapping'),
+      '#title' => $this->t('Mapping'),
       '#tree' => TRUE,
 
       'content_types' => [
@@ -104,20 +114,25 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<string, mixed> $form
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     try {
       $value = $form_state->getValue(['mapping', 'content_types']);
       Yaml::parse($value);
-    } catch (ParseException $ex) {
+    }
+    catch (ParseException $ex) {
       $form_state->setError($form['mapping']['content_types'], $this->t('Content types must be valid YAML (@message)', ['@message' => $ex->getMessage()]));
     }
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-param array<string, mixed> $form
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $config = $this->config('event_database_push.settings');
 
     $config->set('api.url', $form_state->getValue(['api', 'url']));
@@ -127,16 +142,17 @@ class SettingsForm extends ConfigFormBase {
     $config->set('mapping.content_types', $form_state->getValue(['mapping', 'content_types']));
 
     $config->save();
-
-    return parent::submitForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @phpstan-return array<int, mixed>
    */
   protected function getEditableConfigNames() {
     return [
       'event_database_push.settings',
     ];
   }
+
 }
