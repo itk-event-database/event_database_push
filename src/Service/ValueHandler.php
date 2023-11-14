@@ -2,6 +2,7 @@
 
 namespace Drupal\event_database_push\Service;
 
+// phpcs:ignore
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\file\Entity\File;
