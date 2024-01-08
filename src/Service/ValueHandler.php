@@ -116,7 +116,7 @@ class ValueHandler extends BaseValueHandler {
         break;
 
       case 'link':
-        $value = $field->getValue()[0]['uri'];
+        $value = $field->getValue() ? $field->getValue()[0]['uri']: null;
         break;
 
       case 'entity_reference':
