@@ -69,10 +69,9 @@ class Handler {
           if ($success) {
             $this->deleteApiData($node);
             $this->logger->info(
-              $this->t('Event "@title" (@id; @apiEventId) deleted from Event database', [
+              $this->t('Event "@title" deleted from Event database', [
                 '@title' => $node->getTitle(),
-                '@id' => $node->id(),
-                '@apiEventId' => $event->getItemId(),
+                '@id' => $node->id()
               ])
             );
           }
