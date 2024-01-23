@@ -96,10 +96,10 @@ class Handler {
         if ($event) {
           $this->logger->info(
             $this->t('Event "@title" (@id; @apiEventId) created in Event database', [
-              '@title' => $node->getTitle(),
-              '@id' => $node->id(),
-              '@apiEventId' => $event->getItemId(),
-            ]
+                '@title' => $node->getTitle(),
+                '@id' => $node->id(),
+                '@apiEventId' => $event->getItemId(),
+              ]
             )
           );
         }
@@ -110,14 +110,14 @@ class Handler {
             ]), 'error');
           $this->logger->error(
             $this->t('Cannot create event "@title" (@id) in Event database', [
-              '@title' => $node->getTitle(),
-              '@id' => $node->id(),
-            ]
+                '@title' => $node->getTitle(),
+                '@id' => $node->id(),
+              ]
             )
           );
           return;
         }
-        $this->updateApiData($node, $event);
+        $this->updateApiData($node, $event->getItemId());
         break;
 
       case 'update':
@@ -128,10 +128,10 @@ class Handler {
           if ($success) {
             $this->logger->info(
               $this->t('Event "@title" (@id; @apiEventId) updated in Event database', [
-                '@title' => $node->getTitle(),
-                '@id' => $node->id(),
-                '@apiEventId' => $event->getItemId(),
-              ]
+                  '@title' => $node->getTitle(),
+                  '@id' => $node->id(),
+                  '@apiEventId' => $event->id,
+                ]
               )
             );
           }
@@ -144,19 +144,18 @@ class Handler {
               $this->t('Cannot update event "@title" (@id; @apiEventId) in Event database', [
                 '@title' => $node->getTitle(),
                 '@id' => $node->id(),
-                '@apiEventId' => $event->getItemId(),
+                '@apiEventId' => $event->id,
               ])
             );
           }
         }
         else {
-          $apiData = new \stdClass();
           $event = $client->createEvent($eventData);
           if ($event) {
             $this->logger->info($this->t('Event "@title" (@id; @apiEventId) created in Event database', [
               '@title' => $node->getTitle(),
               '@id' => $node->id(),
-              '@apiEventId' => $event->getItemId(),
+              '@apiEventId' => $event->id,
             ]));
           }
           else {
@@ -171,7 +170,8 @@ class Handler {
             return;
           }
         }
-        $this->updateApiData($node, $event);
+
+        $this->updateApiData($node, $event->id);
         break;
     }
   }
@@ -224,10 +224,10 @@ class Handler {
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node.
-   * @param \Itk\EventDatabaseClient\Item\Event $event
-   *   Event db event.
+   * @param $eventId
+   *   Event db id.
    */
-  private function updateApiData(NodeInterface $node, Event $event): void {
+  private function updateApiData(NodeInterface $node, $eventId): void {
     $now = (new \DateTime())->format(\DateTime::ISO8601);
 
     $apiData = $this->getApiData($node);
@@ -240,14 +240,14 @@ class Handler {
       $sql = 'INSERT INTO {event_database_push_data}(type, nid, data, eid) VALUES (:type, :nid, :data, :eid)';
     }
     $apiData->event = [
-      'id' => $event->getItemId(),
+      'id' => $eventId,
     ];
     $apiData->updated_at = $now;
     $params = [
       'type' => $node->getType(),
       'nid' => $node->id(),
       'data' => json_encode($apiData),
-      'eid' => $event->getItemId(),
+      'eid' => $eventId,
     ];
     $this->connection->query($sql, $params);
   }
